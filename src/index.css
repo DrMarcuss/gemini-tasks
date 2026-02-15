@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  /* Сообщаем браузеру, что у нас темная тема */
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  
+  /* ГЛАВНЫЙ ЦВЕТ ФОНА (Темно-синий космос) */
+  background-color: #020617;
+  
+  /* Цвет текста */
+  color: rgba(255, 255, 255, 0.87);
+  
+  /* Растягиваем на весь экран */
+  min-height: 100vh;
+  width: 100%;
+  
+  /* Центрируем контент */
+  display: flex;
+  place-items: center;
+  justify-content: center;
+}
+
+/* === ЭФФЕКТ СТЕКЛА (Glassmorphism) === */
+/* Используется для карточек задач */
+.glass-panel {
+  background: rgba(30, 41, 59, 0.4); /* Полупрозрачный синий */
+  backdrop-filter: blur(12px);       /* Размытие фона сзади */
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Тонкая рамка */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);  /* Тень */
+}
+
+/* === КРАСИВЫЙ СКРОЛЛБАР === */
+/* Делаем полосу прокрутки тонкой и синей */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #020617; 
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155; 
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0ea5e9; /* Ярко-синий при наведении */
+}
+
+/* === УБИРАЕМ СИНЮЮ ОБВОДКУ ПРИ КЛИКЕ === */
+button:focus, input:focus {
+  outline: none;
+}
