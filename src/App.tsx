@@ -1,13 +1,13 @@
+import Auth from './Auth';
 import { useEffect, useState } from 'react';
-import { supabase } from './supabase';
+import { supabase } from './lib/supabase';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Plus, Trash2, CheckCircle2, Circle, Sparkles, AlertCircle 
-} from 'lucide-react';
-
+import { Plus, Trash2, CheckCircle2, Circle, Sparkles, AlertCircle } from 'lucide-react';
 // ==========================================
 // 🏗️ ТИПЫ ДАННЫХ (БЕЗ ЛИШНИХ СТРОК)
 // ==========================================
+console.log('МОЙ URL:', import.meta.env.VITE_SUPABASE_URL);
+console.log('МОЙ КЛЮЧ:', import.meta.env.VITE_SUPABASE_ANON_KEY);
 
 // Приоритеты: 1, 2, 3
 type TaskPriority = 1 | 2 | 3;
@@ -45,11 +45,24 @@ export default function App() {
   const [priority, setPriority] = useState<TaskPriority>(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  const [session, setSession] = useState<any>(null)
   // 1. ЗАГРУЗКА
   useEffect(() => {
-    fetchTasks();
-  }, []);
+  // Проверяем, залогинен ли пользователь сейчас
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    setSession(session);
+    if (session) fetchTasks(); // Загружаем задачи ТОЛЬКО если есть сессия
+  });
+
+  // Слушаем изменения (вход/выход)
+  const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    setSession(session);
+    if (session) fetchTasks();
+    else setTasks([]); // Очищаем задачи при выходе
+  });
+
+  return () => subscription.unsubscribe();
+}, []);
 
   async function fetchTasks() {
     try {
